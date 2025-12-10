@@ -40,3 +40,14 @@ df <- db %>%
 df <- df %>% mutate(year = 2010)
 
 write.csv(df, "C:/Users/oniru/OneDrive/Development/Econ 590/Homework/2010_2011_data.csv", row.names = F)
+
+
+# Count how many hh-crop pairs
+df <- df %>% mutate(hh_crop = interaction(HHID, cropID, drop = T))
+
+df %>%
+  group_by(year, hh_crop) %>%
+  summarise(n_plots = n(), .groups = "drop") %>%
+  group_by(year) %>%
+  summarise(total_hh_crop_pairs = n(), multi_plot_pairs = sum(n_plots > 1), share_multi = mean(n_plots > 1))
+
